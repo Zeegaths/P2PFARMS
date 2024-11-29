@@ -7,23 +7,21 @@ import {
   CloseButton,
   Flex,
   Icon,
-  useColorModeValue,
   Text,
   Drawer,
   DrawerContent,
   useDisclosure,
-  Button,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import {
   FiHome,
-  FiTrendingUp,
   FiCompass,
   FiStar,
   FiSettings,
   FiMenu,
   FiUserPlus, // For the agent icon
 } from 'react-icons/fi'
-import { FaCartArrowDown } from "react-icons/fa";
+import { FaCartArrowDown } from 'react-icons/fa'
 
 const LinkItems = [
   { name: 'Home', icon: FiHome, path: '/' },
@@ -37,7 +35,7 @@ export default function SimpleSidebar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <Box bg={useColorModeValue('gray.100', 'gray.900')}>
+    <Box bg={useColorModeValue('white', 'black')}>
       <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
       <Drawer
         isOpen={isOpen}
@@ -62,21 +60,35 @@ export default function SimpleSidebar() {
 const SidebarContent = ({ onClose, ...rest }) => {
   return (
     <Box
-      bg="rgba(0, 0, 0, 0.7)"
+      bg={useColorModeValue('white', 'black')} // Background changes with mode
+      color={useColorModeValue('black', 'white')} // Text changes with mode
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
       pos="fixed"
       h="full"
       {...rest}>
-      {/* Remove the header section */}
-      <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+      <Text
+        fontSize="2xl"
+        fontWeight="bold"
+        color={useColorModeValue('black', 'white')} // Text color for dark mode
+        textAlign="center"
+        mt="4"
+        mb="6">
+        P2P Farmers
+      </Text>
+
+      <CloseButton
+        display={{ base: 'flex', md: 'none' }}
+        onClick={onClose}
+        color={useColorModeValue('black', 'white')} // Close button matches text color
+      />
       {LinkItems.map((link) => (
         <NavItem key={link.name} icon={link.icon} path={link.path}>
           {link.name}
         </NavItem>
       ))}
-      
+
       {/* Agent button at the bottom */}
       <NavItem icon={FiUserPlus} path="/farmerslist">
         Agent
@@ -84,7 +96,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
       <NavItem icon={FiUserPlus} path="/agentslist">
         Admin
       </NavItem>
-
     </Box>
   )
 }
@@ -103,17 +114,20 @@ const NavItem = ({ icon, children, path, ...rest }) => {
         borderRadius="lg"
         role="group"
         cursor="pointer"
+        bg={useColorModeValue('white', 'black')} // Background for light/dark mode
+        color={useColorModeValue('black', 'white')} // Text color
         _hover={{
-          bg: 'green.400',
-          color: 'white',
+          bg: useColorModeValue('gray.100', 'gray.700'), // Hover background changes
+          color: useColorModeValue('black', 'white'), // Hover text color
         }}
         {...rest}>
         {icon && (
           <Icon
             mr="4"
             fontSize="16"
+            color={useColorModeValue('black', 'white')} // Icon color matches text
             _groupHover={{
-              color: 'white',
+              color: useColorModeValue('black', 'white'), // Icon hover color
             }}
             as={icon}
           />
@@ -131,6 +145,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
       onClick={onOpen}
       aria-label="open menu"
       icon={<FiMenu />}
+      color={useColorModeValue('black', 'white')} // Icon color for dark mode
       display={{ base: 'flex', md: 'none' }} // Hide on large screens
     />
   )

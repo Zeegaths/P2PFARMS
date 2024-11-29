@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Text, VStack, Flex, Image, IconButton } from '@chakra-ui/react';
+import { Box, Button, Text, VStack, Flex, Image, IconButton, useColorModeValue } from '@chakra-ui/react';
 import { FaHeart } from 'react-icons/fa';
 import SidebarWithHeader from '../Sidebar';
 
@@ -12,7 +12,7 @@ const Favorites = () => {
       userName: "Farmer John",
       datePosted: "2024-11-10 12:00",
       profilePic: '/farmer1.jpg',
-      image: '/pepper.jpg',  // Image for the post
+      image: '/pepper.jpg', // Image for the post
       favorites: 10,
     },
     {
@@ -21,15 +21,24 @@ const Favorites = () => {
       userName: "Farmer Emily",
       datePosted: "2024-11-09 09:30",
       profilePic: '/farmer2.jpg',
-      image: '/cabbage.jpg',  // Image for the post
+      image: '/cabbage.jpg', // Image for the post
       favorites: 8,
-    }
+    },
   ]);
 
+  // Dynamic colors
+  const bgColor = useColorModeValue('white', 'black');
+  const sectionBgColor = useColorModeValue('gray.100', 'gray.800');
+  const textColor = useColorModeValue('black', 'white');
+  const secondaryTextColor = useColorModeValue('gray.600', 'gray.400');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
+  const buttonBg = useColorModeValue('gray.200', 'gray.700');
+  const buttonHoverBg = useColorModeValue('gray.300', 'gray.600');
+
   return (
-    <Flex minH="100vh" bg="rgba(0,255,0,0.1)" backdropFilter="blur(10px)">
+    <Flex minH="100vh" bg={bgColor} color={textColor}>
       {/* Sidebar */}
-      <Box width={{ base: 'full', md: '0px' }} bg="rgba(0, 0, 0, 0.1)" flexShrink={0}>
+      <Box width={{ base: 'full', md: '0px' }} bg={bgColor} flexShrink={0}>
         <SidebarWithHeader />
       </Box>
 
@@ -43,17 +52,27 @@ const Favorites = () => {
           p={8}
           borderRadius="lg"
           boxShadow="md"
+          bg={sectionBgColor}
         >
-          <Text textAlign="center" fontWeight="bold" fontSize="4xl" color="White.500">
+          <Text textAlign="center" fontWeight="bold" fontSize="4xl" color={textColor}>
             Your Favorited Posts
           </Text>
 
           {/* Displaying favorited posts */}
           <VStack w="full" spacing={4}>
             {favorites.map((post) => (
-              <Box key={post.id} w="full" p={4} borderWidth="1px" borderRadius="md" bg="black" boxShadow="md">
+              <Box
+                key={post.id}
+                w="full"
+                p={4}
+                borderWidth="1px"
+                borderRadius="md"
+                bg={sectionBgColor}
+                boxShadow="md"
+                borderColor={borderColor}
+              >
                 <Flex align="center" mb={2}>
-                  <Box 
+                  <Box
                     bgImage={`url(${post.profilePic})`}
                     bgSize="cover"
                     bgPosition="center"
@@ -62,10 +81,12 @@ const Favorites = () => {
                     borderRadius="full"
                     mr={3}
                   />
-                  <Text fontWeight="bold" color="green.500">{post.userName}</Text>
-                  <Text fontSize="sm" color="gray.500" ml={2}>{post.datePosted}</Text>
+                  <Text fontWeight="bold" color={textColor}>{post.userName}</Text>
+                  <Text fontSize="sm" color={secondaryTextColor} ml={2}>
+                    {post.datePosted}
+                  </Text>
                 </Flex>
-                <Text color="white" fontSize="md">{post.text}</Text>
+                <Text color={textColor} fontSize="md">{post.text}</Text>
                 {post.image && (
                   <Box mt={2}>
                     <Image src={post.image} alt="Post Image" boxSize="100%" objectFit="cover" />
@@ -74,8 +95,9 @@ const Favorites = () => {
                 <Flex justify="flex-end" mt={4}>
                   <Button
                     leftIcon={<FaHeart />}
-                    colorScheme="yellow"
-                    variant="ghost"
+                    bg={buttonBg}
+                    color={textColor}
+                    _hover={{ bg: buttonHoverBg }}
                     isDisabled
                   >
                     {post.favorites} Favorites

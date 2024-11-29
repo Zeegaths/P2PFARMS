@@ -12,20 +12,18 @@ import {
   Drawer,
   DrawerContent,
   useDisclosure,
-  Button,
 } from '@chakra-ui/react'
 import {
   FiHome,
-  FiTrendingUp,
   FiCompass,
   FiStar,
   FiSettings,
   FiMenu,
   FiUserPlus, // For the agent icon
 } from 'react-icons/fi'
-import { FaCartArrowDown } from "react-icons/fa";
+import { FaCartArrowDown } from 'react-icons/fa'
 
-// Update the sidebar links to include the new options
+// Sidebar links
 const LinkItems = [
   { name: 'Farmers', icon: FiUserPlus, path: '/farmerslist' },
   { name: 'New Farmer', icon: FiUserPlus, path: '/addfarmer' },
@@ -41,7 +39,7 @@ export default function AgentSidebar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <Box bg={useColorModeValue('gray.100', 'gray.900')}>
+    <Box bg={useColorModeValue('white', 'black')}>
       <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
       <Drawer
         isOpen={isOpen}
@@ -57,7 +55,7 @@ export default function AgentSidebar() {
       {/* mobilenav */}
       <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">
-        {/* Content */}
+        {/* Main content */}
       </Box>
     </Box>
   )
@@ -66,15 +64,29 @@ export default function AgentSidebar() {
 const SidebarContent = ({ onClose, ...rest }) => {
   return (
     <Box
-      bg="rgba(0, 0, 0, 0.7)"
+      bg={useColorModeValue('white', 'black')} // Background dynamically changes
+      color={useColorModeValue('black', 'white')} // Text color dynamically changes
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
       pos="fixed"
       h="full"
       {...rest}>
-      {/* Remove the header section */}
-      <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+      <Text
+        fontSize="2xl"
+        fontWeight="bold"
+        color={useColorModeValue('black', 'white')} // Title text color
+        textAlign="center"
+        mt="4"
+        mb="6">
+        Agent Panel
+      </Text>
+
+      <CloseButton
+        display={{ base: 'flex', md: 'none' }}
+        onClick={onClose}
+        color={useColorModeValue('black', 'white')} // Close button color
+      />
       {LinkItems.map((link) => (
         <NavItem key={link.name} icon={link.icon} path={link.path}>
           {link.name}
@@ -98,17 +110,20 @@ const NavItem = ({ icon, children, path, ...rest }) => {
         borderRadius="lg"
         role="group"
         cursor="pointer"
+        bg={useColorModeValue('white', 'black')} // Background matches mode
+        color={useColorModeValue('black', 'white')} // Text color matches mode
         _hover={{
-          bg: 'green.400',
-          color: 'white',
+          bg: useColorModeValue('gray.100', 'gray.700'), // Hover effect dynamically changes
+          color: useColorModeValue('black', 'white'),
         }}
         {...rest}>
         {icon && (
           <Icon
             mr="4"
             fontSize="16"
+            color={useColorModeValue('black', 'white')} // Icon color matches mode
             _groupHover={{
-              color: 'white',
+              color: useColorModeValue('black', 'white'), // Icon hover color
             }}
             as={icon}
           />
@@ -126,7 +141,8 @@ const MobileNav = ({ onOpen, ...rest }) => {
       onClick={onOpen}
       aria-label="open menu"
       icon={<FiMenu />}
-      display={{ base: 'flex', md: 'none' }} // Hide on large screens
+      color={useColorModeValue('black', 'white')} // Menu button color
+      display={{ base: 'flex', md: 'none' }} // Hide on larger screens
     />
   )
 }

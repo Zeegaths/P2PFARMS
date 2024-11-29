@@ -15,13 +15,12 @@ import {
   IconButton,
   Tooltip,
   VStack,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { Actor, HttpAgent } from '@dfinity/agent';
-// import { idlFactory as ckUSDCIdlFactory, canisterId as ckUSDCCanisterId } from 'path/to/ckusdc_declarations'; 
 import SidebarWithHeader from '../Sidebar';
-import Simple from './Products'; // Import the detailed product component
-// import withAuth from '../lib/withAuth';
+import Simple from './Products';
 
 function ProductList() {
   const products = [
@@ -46,15 +45,9 @@ function ProductList() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [cart, setCart] = useState([]); // State to manage cart items
 
-  // Initialize CKUSDC actor
-  const initializeActor = async () => {
-    const agent = new HttpAgent({ host: 'https://icp0.io' }); // Use the appropriate host
-    const actor = Actor.createActor(ckUSDCIdlFactory, {
-      agent,
-      canisterId: ckUSDCCanisterId,
-    });
-    return actor;
-  };
+  const bgColor = useColorModeValue('white', 'black');
+  const textColor = useColorModeValue('black', 'white');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
 
   const handleExpand = (product) => {
     setSelectedProduct(product);
@@ -106,9 +99,9 @@ function ProductList() {
   };
 
   return (
-    <Flex direction={{ base: 'column', md: 'row' }} minH="100vh" bg="rgba(0,255,0,0.1)" backdropFilter="blur(10px)">
+    <Flex direction={{ base: 'column', md: 'row' }} minH="100vh" bg={bgColor} color={textColor}>
       {/* Sidebar */}
-      <Box width={{ base: 'full', md: '250px' }}  flexShrink={0}>
+      <Box width={{ base: 'full', md: '250px' }} bg={bgColor} color={textColor} flexShrink={0} borderRightWidth="1px" borderRightColor={borderColor}>
         <SidebarWithHeader />
       </Box>
 
@@ -119,7 +112,6 @@ function ProductList() {
           <Tooltip label="View Cart" aria-label="View Cart Tooltip">
             <IconButton
               icon={<FaShoppingCart />}
-              colorScheme="teal"
               variant="outline"
               onClick={onCartOpen}
               aria-label="View Cart"
@@ -135,7 +127,9 @@ function ProductList() {
               borderRadius="lg"
               overflow="hidden"
               p={4}
-              bg="white"
+              bg={bgColor}
+              color={textColor}
+              borderColor={borderColor}
               shadow="md"
             >
               {/* Small product card */}
@@ -146,13 +140,12 @@ function ProductList() {
                 </Text>
                 <Text color="gray.500">{product.price}</Text>
                 <Flex justifyContent="center" mt={4}>
-                  <Button colorScheme="green" size="sm" onClick={() => handleExpand(product)}>
+                  <Button variant="outline" size="sm" onClick={() => handleExpand(product)}>
                     View Details
                   </Button>
                   <Tooltip label="Add to Cart" aria-label="Add to Cart Tooltip">
                     <IconButton
                       icon={<FaShoppingCart />}
-                      colorScheme="teal"
                       variant="outline"
                       size="sm"
                       ml={2}
@@ -171,13 +164,13 @@ function ProductList() {
       {selectedProduct && (
         <Modal isOpen={isOpen} onClose={onClose} size="full">
           <ModalOverlay />
-          <ModalContent>
-            <ModalCloseButton onClick={onClose} /> {/* Close button to go back to product list */}
+          <ModalContent bg={bgColor} color={textColor}>
+            <ModalCloseButton />
             <ModalBody>
-              <Simple /> {/* Render the full expanded product component */}
-              <Button mt={4} onClick={onClose} colorScheme="green">
+              <Simple />
+              <Button mt={4} onClick={onClose}>
                 Back to Product List
-              </Button> {/* Back button */}
+              </Button>
             </ModalBody>
           </ModalContent>
         </Modal>
@@ -186,7 +179,7 @@ function ProductList() {
       {/* Cart Modal */}
       <Modal isOpen={isCartOpen} onClose={onCartClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg={bgColor} color={textColor}>
           <ModalCloseButton />
           <ModalBody>
             <VStack spacing={4} align="start">
@@ -195,12 +188,12 @@ function ProductList() {
               ) : (
                 <>
                   {cart.map((item, index) => (
-                    <Flex key={index} justifyContent="space-between" w="full" p={2} borderWidth="1px" borderRadius="md">
+                    <Flex key={index} justifyContent="space-between" w="full" p={2} borderWidth="1px" borderRadius="md" borderColor={borderColor}>
                       <Text>{item.name}</Text>
                       <Text>{item.price}</Text>
                     </Flex>
                   ))}
-                  <Button colorScheme="blue" w="full" mt={4} onClick={handleCheckout}>
+                  <Button w="full" mt={4} onClick={handleCheckout}>
                     Checkout with CKUSDC
                   </Button>
                 </>

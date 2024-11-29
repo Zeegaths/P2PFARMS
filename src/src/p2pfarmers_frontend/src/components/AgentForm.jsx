@@ -28,6 +28,7 @@ import {
   useColorModeValue,
   VStack,
   HStack,
+  Center,
 } from "@chakra-ui/react";
 import useGeolocation from "../hooks/useGeolocation";
 import { createBackendActor } from "../helper/auth";
@@ -560,7 +561,7 @@ export default function AgentForm() {
 
   return (
     <>
-      <Flex direction="row" minH="100vh" bg={bg}>
+      <Flex direction="row" minH="100vh" bg={bg} >
         {/* Sidebar */}
         <Box display={{ base: "none", md: "block" }} w="250px">
           <SimpleSidebar />
