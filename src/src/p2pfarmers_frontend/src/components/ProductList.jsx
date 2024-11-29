@@ -18,7 +18,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { FaShoppingCart } from 'react-icons/fa';
-import { Actor, HttpAgent } from '@dfinity/agent';
+import { useNavigate } from 'react-router-dom';
 import SidebarWithHeader from '../Sidebar';
 import Simple from './Products';
 
@@ -28,22 +28,23 @@ function ProductList() {
       id: 1,
       name: 'Fresh cabbage',
       price: '$20.00/kg',
-      priceInUSDC: 20, // Price in CKUSDC equivalent
+      priceInUSDC: 20,
       image: '/cabbage.jpg',
     },
     {
       id: 2,
       name: 'Nigerian Pepper',
       price: '$45.00/kg',
-      priceInUSDC: 45, // Price in CKUSDC equivalent
+      priceInUSDC: 45,
       image: '/pepper.jpg',
     },
   ];
 
+  const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isCartOpen, onOpen: onCartOpen, onClose: onCartClose } = useDisclosure();
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [cart, setCart] = useState([]); // State to manage cart items
+  const [cart, setCart] = useState([]);
 
   const bgColor = useColorModeValue('white', 'black');
   const textColor = useColorModeValue('black', 'white');
@@ -51,51 +52,20 @@ function ProductList() {
 
   const handleExpand = (product) => {
     setSelectedProduct(product);
-    onOpen(); // Open the modal when a product is clicked
+    onOpen();
   };
 
   const handleAddToCart = (product) => {
-    setCart([...cart, product]); // Add product to the cart
+    setCart([...cart, product]);
     alert(`${product.name} added to cart!`);
   };
+  
+  const handleTracking = () => {
+    navigate('/orderstatus')
+  }
 
-  const handleCheckout = async () => {
-    if (cart.length === 0) {
-      alert('Your cart is empty.');
-      return;
-    }
-
-    try {
-      const actor = await initializeActor();
-
-      // Calculate total price in CKUSDC
-      const totalPrice = cart.reduce((acc, item) => acc + item.priceInUSDC, 0);
-      const amount = BigInt(totalPrice * 10 ** 6); // Assuming CKUSDC has 6 decimal places
-
-      // Specify recipient's account identifier (update with actual recipient)
-      const recipientAccountIdentifier = 'RecipientAccountIdentifierHere'; // Replace with the actual account identifier
-
-      // Perform the transfer
-      const result = await actor.transfer({
-        to: recipientAccountIdentifier,
-        fee: { e8s: BigInt(10000) }, // Example fee, adjust based on CKUSDC fee structure
-        amount: { e8s: amount },
-        memo: BigInt(0),
-        from_subaccount: [],
-        created_at_time: [],
-      });
-
-      if ('Ok' in result) {
-        alert('Payment successful!');
-        setCart([]); // Clear the cart after successful payment
-        onCartClose(); // Close the cart modal
-      } else {
-        alert('Payment failed. Please try again.');
-      }
-    } catch (error) {
-      console.error('Payment failed:', error);
-      alert('Payment failed. Please check your connection and try again.');
-    }
+  const handleNavigateToUpload = () => {
+    navigate('/upload'); // Navigate to the upload page
   };
 
   return (
@@ -107,16 +77,23 @@ function ProductList() {
 
       {/* Product List */}
       <Box flex="1" p={4} overflowY="auto">
-        {/* Cart Button */}
-        <Flex justifyContent="flex-end" mb={4}>
+        <Flex justifyContent="space-between" alignItems="center" mb={4}>
           <Tooltip label="View Cart" aria-label="View Cart Tooltip">
             <IconButton
               icon={<FaShoppingCart />}
               variant="outline"
-              onClick={onCartOpen}
+              onClick={handleTracking}
               aria-label="View Cart"
             />
           </Tooltip>
+          <Button
+            bg="green.400"
+            color="white"
+            _hover={{ bg: 'green.500' }}
+            onClick={handleNavigateToUpload}
+          >
+            Upload Product
+          </Button>
         </Flex>
 
         <Grid templateColumns="repeat(auto-fill, minmax(250px, 1fr))" gap={6}>
@@ -132,7 +109,6 @@ function ProductList() {
               borderColor={borderColor}
               shadow="md"
             >
-              {/* Small product card */}
               <Box textAlign="center">
                 <Image src={product.image} alt={product.name} boxSize="150px" objectFit="cover" mx="auto" mb={4} />
                 <Text fontWeight="bold" fontSize="lg">
@@ -193,8 +169,8 @@ function ProductList() {
                       <Text>{item.price}</Text>
                     </Flex>
                   ))}
-                  <Button w="full" mt={4} onClick={handleCheckout}>
-                    Checkout with CKUSDC
+                  <Button w="full" mt={4}>
+                    Checkout
                   </Button>
                 </>
               )}
@@ -206,5 +182,4 @@ function ProductList() {
   );
 }
 
-const Page = ProductList;
-export default Page;
+export default ProductList;

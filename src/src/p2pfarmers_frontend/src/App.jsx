@@ -17,6 +17,7 @@ import FarmersList from "./Dashboards/FarmerList";
 import AgentsList from "./Dashboards/AgentList";
 import AllFarmers from "./Dashboards/AllFarmers";
 import PermissionedUsers from "./Dashboards/PermissionedUsers";
+import ProductUploadPage from "./components/ProductUploadPage";
 
 // Create the router with path-to-component mappings
 const router = createBrowserRouter([
@@ -76,6 +77,10 @@ const router = createBrowserRouter([
   {
     path: "/permissions",
     element: <PermissionedUsers />,
+  },
+  {
+    path: "/upload",
+    element: <ProductUploadPage />,
   },
 ]);
 

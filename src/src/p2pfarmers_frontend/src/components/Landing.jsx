@@ -52,23 +52,56 @@ const Illustration = () => {
 
 export default function CallToActionWithIllustration() {
   const navigate = useNavigate();
-  const [processK, setProcess] = useState(0);
   const identityProvider = getIdentityProvider();
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const { dispatch } = useAuth();
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const scrollAnimation = getScrollAnimation();
 
+  const { isAuthenticated, login, logout, identity } = useAuthClient({
+    loginOptions: {
+      identityProvider,
+    },
+    actorOptions: {
+      canisterId,
+      idlFactory,
+    },
+  });
+
   const handleLogin = async () => {
-    setProcess(1);
-    setIsLoggingIn(true);
-    await login();
+    try {
+      setIsLoggingIn(true);
+      await login();
+      if (isAuthenticated) {
+        const backend = await createBackendActor(identity);
+        const result = await backend.getProfile(identity.getPrincipal());
+        if (result.ok) {
+          dispatch(authActions.login(result.ok));
+          navigate('/productlist');
+        } else {
+          dispatch(authActions.login(null));
+          navigate('/usertype');
+        }
+      }
+    } catch (error) {
+      console.error('Login failed:', error);
+    } finally {
+      setIsLoggingIn(false);
+    }
   };
 
   const handleRegister = async () => {
-    setProcess(2);
-    setIsLoggingIn(true);
-    await login();
+    try {
+      setIsLoggingIn(true);
+      await login();
+      if (isAuthenticated) {
+        navigate('/usertype');
+      }
+    } catch (error) {
+      console.error('Register failed:', error);
+    } finally {
+      setIsLoggingIn(false);
+    }
   };
 
   return (
@@ -139,7 +172,7 @@ export default function CallToActionWithIllustration() {
                 _hover={{ bg: 'green.500' }}
                 whileHover={{ scale: 1.05 }}
                 onClick={handleLogin}
-                isLoading={isLoggingIn && processK === 1}
+                isLoading={isLoggingIn}
               >
                 Login
               </MotionButton>
@@ -151,7 +184,7 @@ export default function CallToActionWithIllustration() {
                 _hover={{ bg: 'yellow.500' }}
                 whileHover={{ scale: 1.05 }}
                 onClick={handleRegister}
-                isLoading={isLoggingIn && processK === 2}
+                isLoading={isLoggingIn}
               >
                 Register
               </MotionButton>
@@ -169,7 +202,7 @@ export default function CallToActionWithIllustration() {
       <BasicStatistics />
       <SimpleThreeColumns />
 
-      {/* Farmer Section */}
+      {/* Are you a Farmer Section */}
       <MotionStack
         align={'center'}
         textAlign={'center'}
