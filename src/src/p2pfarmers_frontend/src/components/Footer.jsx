@@ -4,21 +4,29 @@ import {
   Box,
   chakra,
   Container,
+  SimpleGrid,
   Stack,
   Text,
-  Button,
+  Input,
+  IconButton,
   useColorModeValue,
-  VisuallyHidden,
 } from '@chakra-ui/react'
-import { FaTwitter, FaDiscord, FaTelegram } from 'react-icons/fa'
-import ScrollAnimationWrapper from '../styles/ScrollAnimationWrapper'
-import { ReactNode } from 'react'
+import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa'
+import { BiMailSend } from 'react-icons/bi'
 
-const SocialButton = ({
-  children,
-  label,
-  href,
-}) => {
+const Logo = (props) => {
+  return (
+    <svg height={32} viewBox="0 0 120 28" xmlns="http://www.w3.org/2000/svg" {...props}>
+      {/* Add your logo path */}
+      <path
+        d="M26.48 8.62001C25.9711 7.45637 25.2975 6.37195 24.48 5.40001..."
+        fill="#2F855A"
+      />
+    </svg>
+  )
+}
+
+const SocialButton = ({ children, label, href }) => {
   return (
     <chakra.button
       bg={useColorModeValue('blackAlpha.100', 'whiteAlpha.100')}
@@ -31,49 +39,111 @@ const SocialButton = ({
       display={'inline-flex'}
       alignItems={'center'}
       justifyContent={'center'}
-      transition={'background 0.3s ease'}
+      transition={'all 0.3s ease'}
       _hover={{
-        bg: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
-      }}>
-      <VisuallyHidden>{label}</VisuallyHidden>
+        transform: 'scale(1.1)',
+        bg: useColorModeValue('blackAlpha.200', 'whiteAlpha.300'),
+      }}
+    >
       {children}
     </chakra.button>
   )
 }
 
-export default function SmallWithSocial() {
+const ListHeader = ({ children }) => {
   return (
-    <Box
-      bg={useColorModeValue('')}
-      color={useColorModeValue('gray.700', 'gray.200')}>
-      <Container
-        as={Stack}
-        maxW={'6xl'}
-        py={4}
-        direction={{ base: 'column', md: 'row' }}
-        spacing={4}
-        justify={{ base: 'center', md: 'space-between' }}
-        align={{ base: 'center', md: 'center' }}>
-        <Text>© 2024 P2P Farms. All rights reserved</Text>
-        <Stack direction={'row'} spacing={6}>
-          <SocialButton label={'Twitter'} href={'https://twitter.com'}>
-            <FaTwitter />
-          </SocialButton>
-          <SocialButton label={'Discord'} href={'https://discord.com'}>
-            <FaDiscord />
-          </SocialButton>
-          <SocialButton label={'Telegram'} href={'https://telegram.org'}>
-            <FaTelegram />
-          </SocialButton>
-        </Stack>
-        <Button
-          colorScheme="green"
-          variant="solid"
-          size="lg"
-          mt={4}
-          onClick={() => window.location.href = '#learn-more'}>
-          Learn More
-        </Button>
+    <Text fontWeight={'bold'} fontSize={'lg'} mb={2}>
+      {children}
+    </Text>
+  )
+}
+
+export default function LargeWithNewsletter() {
+  return (
+    <Box color={useColorModeValue('gray.700', 'gray.200')}>
+      <Container as={Stack} maxW={'6xl'} py={10}>
+        <SimpleGrid
+          templateColumns={{ sm: '1fr 1fr', md: '2fr 1fr 1fr 2fr' }}
+          spacing={8}
+        >
+          <Stack spacing={6}>
+            <Box>
+              <Logo color={useColorModeValue('gray.700', 'white')} />
+            </Box>
+            <Text fontSize={'sm'}>© p2pFarmers 2024. All rights reserved</Text>
+            <Stack direction={'row'} spacing={6}>
+              <SocialButton label={'Twitter'} href={'#'}>
+                <FaTwitter />
+              </SocialButton>
+              <SocialButton label={'YouTube'} href={'#'}>
+                <FaYoutube />
+              </SocialButton>
+              <SocialButton label={'Instagram'} href={'#'}>
+                <FaInstagram />
+              </SocialButton>
+            </Stack>
+          </Stack>
+          <Stack align={'flex-start'}>
+            <ListHeader>Company</ListHeader>
+            <Box as="a" href={'#'}>
+              About us
+            </Box>
+            <Box as="a" href={'#'}>
+              Blog
+            </Box>
+            <Box as="a" href={'#'}>
+              Contact us
+            </Box>
+            <Box as="a" href={'#'}>
+              Pricing
+            </Box>
+            <Box as="a" href={'#'}>
+              Testimonials
+            </Box>
+          </Stack>
+          <Stack align={'flex-start'}>
+            <ListHeader>Support</ListHeader>
+            <Box as="a" href={'#'}>
+              Help Center
+            </Box>
+            <Box as="a" href={'#'}>
+              Terms of Service
+            </Box>
+            <Box as="a" href={'#'}>
+              Legal
+            </Box>
+            <Box as="a" href={'#'}>
+              Privacy Policy
+            </Box>
+            <Box as="a" href={'#'}>
+              Status
+            </Box>
+          </Stack>
+          <Stack align={'flex-start'}>
+            <ListHeader>Stay up to date</ListHeader>
+            <Stack direction={'row'}>
+              <Input
+                placeholder={'Your email address'}
+                bg={useColorModeValue('blackAlpha.100', 'whiteAlpha.100')}
+                border={0}
+                _focus={{
+                  bg: 'whiteAlpha.900',
+                  borderColor: useColorModeValue('green.500', 'green.400'),
+                }}
+              />
+              <IconButton
+                bg={useColorModeValue('green.400', 'green.800')}
+                color={useColorModeValue('white', 'gray.800')}
+                _hover={{
+                  bg: 'green.600',
+                  transform: 'scale(1.1)',
+                }}
+                aria-label="Subscribe"
+                icon={<BiMailSend />}
+              />
+            </Stack>
+          </Stack>
+        </SimpleGrid>
       </Container>
     </Box>
   )

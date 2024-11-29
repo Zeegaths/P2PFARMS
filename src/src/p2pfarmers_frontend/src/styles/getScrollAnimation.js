@@ -1,20 +1,20 @@
-// getScrollAnimation.js
 export default function getScrollAnimation() {
-  return {
+	return ({
     offscreen: {
-      y: 150,
+      y: 30,  // Reduced vertical movement
       opacity: 0,
+      scale: 0.97,  // Subtle initial scale
     },
-    onscreen: ({ duration = 2 } = {}) => ({
+    onscreen: ({duration = 0.6, delay = 0} = {}) => ({
       y: 0,
       opacity: 1,
+      scale: 1,
       transition: {
-        type: "spring",
+        type: "tween",  // Smoother transition
         duration,
-        stiffness: 100, // Adjust stiffness for a snappier animation
-        damping: 8,     // Lower damping increases bounciness
-        bounce: 0.5,    // Adds more bounce to the animation
-      },
-    }),
-  };
+        delay,
+        ease: "easeOut",  // Smooth easing function
+      }
+    })
+  })
 }
