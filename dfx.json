@@ -1,0 +1,31 @@
+{
+  "canisters": {
+    "backend": {
+      "main": "src/p2pfarmers_backend/main.mo",
+      "type": "motoko"
+    },
+    "internet-identity": {
+      "type": "pull",
+      "id": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+    },
+    "p2pfarmers_frontend": {
+      "dependencies": [
+        "backend",
+        "internet-identity"
+      ],
+      "source": [
+        "src/p2pfarmers_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "p2pfarmers_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": "mops sources"
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
