@@ -61,7 +61,7 @@ function ProductList() {
   };
   
   const handleTracking = () => {
-    navigate('/orderstatus')
+    navigate('/checkout')
   }
 
   const handleNavigateToUpload = () => {

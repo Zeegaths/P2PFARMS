@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import {
   Box,
   Heading,
@@ -24,33 +24,31 @@ import {
   Input,
   FormControl,
   FormLabel,
-  Text,
-} from '@chakra-ui/react'
-import { FaCheckCircle, FaEdit, FaTrash } from 'react-icons/fa'
-import AgentSidebar from './AgentSidebar'
+} from '@chakra-ui/react';
+import { FaCheckCircle, FaEdit, FaTrash } from 'react-icons/fa';
+import AgentSidebar from './AgentSidebar';
 
 const FarmersList = () => {
-  const toast = useToast()
-
-  const [farmers, setFarmers] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [agentId, setAgentId] = useState('12345') // Example agentId
-  const [selectedFarmer, setSelectedFarmer] = useState(null) // Farmer selected for editing
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false) // Edit modal state
+  const toast = useToast();
+  const [farmers, setFarmers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [agentId, setAgentId] = useState('12345'); // Example agentId
+  const [selectedFarmer, setSelectedFarmer] = useState(null); // Farmer selected for editing
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Edit modal state
 
   // Color adjustments for light and dark mode
-  const headingColor = useColorModeValue('black', 'white')
-  const tableHeaderColor = useColorModeValue('gray.700', 'gray.100')
-  const tableTextColor = useColorModeValue('black', 'white')
-  const buttonColor = useColorModeValue('teal', 'teal')
+  const headingColor = useColorModeValue('black', 'white');
+  const tableHeaderColor = useColorModeValue('gray.700', 'gray.100');
+  const tableTextColor = useColorModeValue('black', 'white');
+  const buttonColor = useColorModeValue('teal', 'teal');
 
   useEffect(() => {
     // Fetch the farmers list based on the agentId
-    fetchFarmersByAgent(agentId)
-  }, [agentId])
+    fetchFarmersByAgent(agentId);
+  }, [agentId]);
 
   const fetchFarmersByAgent = async (agentId) => {
-    setLoading(true)
+    setLoading(true);
 
     // Simulating an API call for fetching farmers data for a specific agent
     setTimeout(() => {
@@ -58,20 +56,20 @@ const FarmersList = () => {
         { id: 1, firstName: 'John', lastName: 'Doe', email: 'johndoe@example.com', registeredDate: '2024-01-01', total: '$1500' },
         { id: 2, firstName: 'Jane', lastName: 'Doe', email: 'janedoe@example.com', registeredDate: '2024-02-15', total: '$2000' },
         { id: 3, firstName: 'Alice', lastName: 'Smith', email: 'alicesmith@example.com', registeredDate: '2024-03-01', total: '$1800' },
-      ]
-      setFarmers(farmersData)
-      setLoading(false)
-    }, 1000)
-  }
+      ];
+      setFarmers(farmersData);
+      setLoading(false);
+    }, 1000);
+  };
 
   const handleEditClick = (farmer) => {
-    setSelectedFarmer(farmer)
-    setIsEditModalOpen(true)
-  }
+    setSelectedFarmer(farmer);
+    setIsEditModalOpen(true);
+  };
 
   const handleDeleteClick = (farmerId) => {
-    const updatedFarmers = farmers.filter((farmer) => farmer.id !== farmerId)
-    setFarmers(updatedFarmers)
+    const updatedFarmers = farmers.filter((farmer) => farmer.id !== farmerId);
+    setFarmers(updatedFarmers);
 
     toast({
       title: 'Farmer Removed',
@@ -79,16 +77,16 @@ const FarmersList = () => {
       status: 'success',
       duration: 3000,
       isClosable: true,
-    })
-  }
+    });
+  };
 
   const handleEditSubmit = () => {
     // Update farmer details
     const updatedFarmers = farmers.map((farmer) =>
       farmer.id === selectedFarmer.id ? selectedFarmer : farmer
-    )
-    setFarmers(updatedFarmers)
-    setIsEditModalOpen(false)
+    );
+    setFarmers(updatedFarmers);
+    setIsEditModalOpen(false);
 
     toast({
       title: 'Farmer Updated',
@@ -96,8 +94,8 @@ const FarmersList = () => {
       status: 'success',
       duration: 3000,
       isClosable: true,
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -107,13 +105,14 @@ const FarmersList = () => {
           <AgentSidebar />
         </Box>
 
+        {/* Main Content */}
         <Box
           flex="1"
           maxWidth="1200px"
           p={6}
           m="10px"
           as="form"
-          bg="rgba(0, 255, 0, 0.1)" // More transparent green background for the form
+          bg={useColorModeValue('white', 'gray.800')} // Light: white, Dark: gray.800
           color={tableTextColor} // Dynamic text color for light/dark mode
         >
           <Heading textAlign="center" fontWeight="normal" mb="2%" color={headingColor}>
@@ -218,7 +217,7 @@ const FarmersList = () => {
             </ModalBody>
             <ModalFooter>
               <Button
-                colorScheme="green"
+                colorScheme="teal"
                 onClick={handleEditSubmit}
               >
                 Save
@@ -231,7 +230,7 @@ const FarmersList = () => {
         </Modal>
       )}
     </>
-  )
-}
+  );
+};
 
-export default FarmersList
+export default FarmersList;

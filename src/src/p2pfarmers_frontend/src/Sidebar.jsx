@@ -12,6 +12,7 @@ import {
   DrawerContent,
   useDisclosure,
   useColorModeValue,
+  useColorMode,
 } from '@chakra-ui/react'
 import {
   FiHome,
@@ -22,6 +23,7 @@ import {
   FiUserPlus, // For the agent icon
 } from 'react-icons/fi'
 import { FaCartArrowDown } from 'react-icons/fa'
+import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 
 const LinkItems = [
   { name: 'Home', icon: FiHome, path: '/' },
@@ -48,7 +50,7 @@ export default function SimpleSidebar() {
           <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
-      {/* mobilenav */}
+      {/* Mobile nav */}
       <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {/* Content */}
@@ -58,6 +60,8 @@ export default function SimpleSidebar() {
 }
 
 const SidebarContent = ({ onClose, ...rest }) => {
+  const { colorMode, toggleColorMode } = useColorMode()
+
   return (
     <Box
       bg={useColorModeValue('white', 'black')} // Background changes with mode
@@ -68,15 +72,30 @@ const SidebarContent = ({ onClose, ...rest }) => {
       pos="fixed"
       h="full"
       {...rest}>
-      <Text
-        fontSize="2xl"
-        fontWeight="bold"
-        color={useColorModeValue('black', 'white')} // Text color for dark mode
-        textAlign="center"
-        mt="4"
-        mb="6">
-        P2P Farmers
-      </Text>
+      <Flex
+        align="center"
+        justify="space-between"
+        px={4}
+        mt={4}
+        mb={6}
+      >
+        <Text
+          fontSize="2xl"
+          fontWeight="bold"
+          color={useColorModeValue('black', 'white')} // Text color for dark mode
+        >
+          P2P Farmers
+        </Text>
+        <IconButton
+          onClick={toggleColorMode}
+          icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+          aria-label="Toggle dark mode"
+          bg="transparent"
+          _hover={{
+            bg: useColorModeValue('gray.100', 'gray.600'),
+          }}
+        />
+      </Flex>
 
       <CloseButton
         display={{ base: 'flex', md: 'none' }}

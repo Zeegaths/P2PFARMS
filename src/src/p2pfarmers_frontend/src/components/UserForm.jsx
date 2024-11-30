@@ -16,7 +16,6 @@ import {
   FormHelperText,
   InputRightElement,
   useToast,
-  useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
@@ -112,67 +111,66 @@ export default function UserForm() {
   const textColor = useColorModeValue('black', 'white')
 
   return (
-    <>
-      <Flex direction="row" minH="100vh" bg={bg}>
-        {/* Sidebar */}
-        <Box display={{ base: 'none', md: 'block' }} w="250px">
-          <SimpleSidebar />
-        </Box>
+    <Flex minH="100vh" bg={bg} justifyContent="center" alignItems="center">
+      {/* Centered Form */}
+      <Box
+        w={{ base: 'full', md: '500px' }}
+        borderWidth="1px"
+        rounded="lg"
+        shadow="md"
+        p={6}
+        bg={formBg}
+        color={textColor}
+      >
+        <Progress hasStripe value={progress} mb="5%" isAnimated colorScheme="green" size="lg" />
+        {step === 1 ? <Form1 /> : null}
 
-        <Box
-          flex="1"
-          borderWidth="1px"
-          rounded="lg"
-          shadow="md"
-          maxWidth={800}
-          p={6}
-          m="10px"
-          as="form"
-          bg={formBg}
-          color={textColor}
-        >
-          <Progress hasStripe value={progress} mb="5%" mx="5%" isAnimated colorScheme="green" size="lg" />
-          {step === 1 ? <Form1 /> : null}
-
-          <ButtonGroup mt="5%" w="100%">
-            <Flex w="100%" justifyContent="center">
-              {step === 1 ? (
-                <Button
-                  w="7rem"
-                  onClick={() => {
-                    setStep(step + 1)
-                    setProgress(progress + 33.33)
-                  }}
-                  colorScheme="green"
-                  variant="solid"
-                >
-                  Next
-                </Button>
-              ) : null}
-
-              {step === 2 ? (
-                <Button
-                  w="7rem"
-                  colorScheme="green"
-                  variant="solid"
-                  onClick={() => {
-                    toast({
-                      title: 'Account created.',
-                      description: "We've created your account for you.",
-                      status: 'success',
-                      duration: 3000,
-                      isClosable: true,
-                    })
-                    navigate('/productlist')
-                  }}
-                >
-                  Submit
-                </Button>
-              ) : null}
-            </Flex>
-          </ButtonGroup>
-        </Box>
-      </Flex>
-    </>
+        <ButtonGroup mt="5%" w="100%" justifyContent="space-between">
+          {step > 1 && (
+            <Button
+              onClick={() => {
+                setStep(step - 1)
+                setProgress(progress - 33.33)
+              }}
+              colorScheme="blue"
+            >
+              Back
+            </Button>
+          )}
+          {step === 1 && (
+            <Button
+              w="7rem"
+              onClick={() => {
+                setStep(step + 1)
+                setProgress(progress + 33.33)
+              }}
+              colorScheme="green"
+              variant="solid"
+            >
+              Next
+            </Button>
+          )}
+          {step === 2 && (
+            <Button
+              w="7rem"
+              colorScheme="green"
+              variant="solid"
+              onClick={() => {
+                toast({
+                  title: 'Account created.',
+                  description: "We've created your account for you.",
+                  status: 'success',
+                  duration: 3000,
+                  isClosable: true,
+                })
+                navigate('/productlist')
+              }}
+            >
+              Submit
+            </Button>
+          )}
+        </ButtonGroup>
+      </Box>
+    </Flex>
   )
 }
