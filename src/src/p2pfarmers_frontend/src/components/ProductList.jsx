@@ -78,14 +78,7 @@ function ProductList() {
       {/* Product List */}
       <Box flex="1" p={4} overflowY="auto">
         <Flex justifyContent="space-between" alignItems="center" mb={4}>
-          <Tooltip label="View Cart" aria-label="View Cart Tooltip">
-            <IconButton
-              icon={<FaShoppingCart />}
-              variant="outline"
-              onClick={handleTracking}
-              aria-label="View Cart"
-            />
-          </Tooltip>
+       
           <Button
             bg="green.400"
             color="white"
@@ -94,6 +87,15 @@ function ProductList() {
           >
             Upload Product
           </Button>
+
+          <Tooltip label="View Cart" aria-label="View Cart Tooltip">
+            <IconButton
+              icon={<FaShoppingCart />}
+              variant="outline"
+              onClick={handleTracking}
+              aria-label="View Cart"
+            />
+          </Tooltip>
         </Flex>
 
         <Grid templateColumns="repeat(auto-fill, minmax(250px, 1fr))" gap={6}>
